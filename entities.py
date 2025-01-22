@@ -1,5 +1,6 @@
 import pygame
 
+
 class PhysicsEntity(pygame.sprite.Sprite):
     def __init__(self, x, y, entity_type):
         super().__init__(entities_sprites)
@@ -36,5 +37,6 @@ class PhysicsEntity(pygame.sprite.Sprite):
 
         if self.collisions['down'] or self.collisions['up']:
             self.velocity[1] = 0
+
 
 entities_sprites = pygame.sprite.Group()

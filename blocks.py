@@ -58,17 +58,25 @@ class Trampoline(Block):
 
 
 class Moving_Block(Block):
-    def __init__(self, x, y, speed, distance):
+    def __init__(self, x, y, speed_x, distance_x, speed_y, distance_y):
         super().__init__(x, y, 'grass')
-        self.speed = speed
-        self.distance = distance
+        self.speed_x = speed_x
+        self.distance_x = distance_x
+        self.speed_y = speed_y
+        self.distance_y = distance_y
         self.r = 0
+        self.k = 0
 
     def update(self):
-        if abs(self.r) >= self.distance:
-            self.speed = -self.speed
-        self.rect = self.rect.move(self.speed, 0)
-        self.r += self.speed
+        if abs(self.r) >= self.distance_x:
+            self.speed_x = -self.speed_x
+
+        if abs(self.k) >= self.distance_y:
+            self.speed_y = -self.speed_y
+
+        self.rect = self.rect.move(self.speed_x, self.speed_y)
+        self.r += self.speed_x
+        self.k += self.speed_y
 
 
 sprite_blocks = pygame.sprite.Group()

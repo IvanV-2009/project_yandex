@@ -43,7 +43,7 @@ def generate_level(level):
             elif level[y][x] == 'G':
                 Disappearing_Block(x, y)
             elif level[y][x] == 'M':
-                Moving_Block(x, y, 1, 20)
+                Moving_Block(x, y, 0, 0, 2, 30)
     return x, y
 
 

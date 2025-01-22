@@ -51,7 +51,7 @@ class Player(PhysicsEntity):
                     block.disappear()
 
                 if type(block) == Moving_Block:
-                    self.xvel += block.speed
+                    self.xvel += block.speed_x
 
                 if self.yvel > 0:
                     self.rect.bottom = block.rect.top
