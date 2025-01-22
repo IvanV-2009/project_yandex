@@ -1,6 +1,8 @@
 import pygame
 
-blocks = {'grass': 'data/blocks/1.png', 'spike': 'data/blocks/spike.png', 'empty': 'data/blocks/empty.png'}
+blocks = {'grass': 'data/blocks/1.png',
+          'spike': 'data/blocks/spike.png',
+          'empty': 'data/blocks/empty.png'}
 
 BLOCK_WIDTH = 30
 BLOCK_HEIGHT = 30
