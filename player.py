@@ -2,95 +2,56 @@ import pygame
 
 from blocks import *
 from entities import *
+from Screens import *
 
-GRAVITY = 0.35
+GRAVITY = 0.75
 
-entities = {'player': 'data/entities/player.png'}
 CELL_SIZE = 30
-
-MOVE_SPEED = 8
 
 cooldown_tracker = 0
 
 
 class Player(PhysicsEntity):
     def __init__(self, x, y):
-        super().__init__(x, y, entities['player'])
+        super().__init__(x, y, 'player')
         self.xvel = 0
-        self.jump_strenght = 10
+        self.jump_strenght = 15
         self.gravitation = GRAVITY
         self.slide = False
-        self.speed_x = MOVE_SPEED
-        self.onGround = False
+        self.jumps = 0
+        self.run = False
+        self.invincible_frames = 0
 
-    def collide_x(self, blocks):
-        col = 0
-        for block in blocks:
-            if pygame.sprite.collide_rect(self, block):
-                if self.xvel > 0:
-                    self.rect.right = block.rect.left
+    def jump(self):
+        if self.collisions['down']:
+            self.velocity[1] = -self.jump_strenght
 
-                if self.xvel < 0:
-                    self.rect.left = block.rect.right
+    def update(self, blocks, movement):
+        super().update(blocks, movement)
 
-                if not self.onGround:
-                    self.slide = True
-                col += 1
+        if self.run:
+            if self.direction == 1:
+                self.velocity[0] = min(2, self.velocity[0] + 0.1)
+            else:
+                self.velocity[0] = max(-2, self.velocity[0] - 0.1)
+        else:
+            if self.direction == 1:
+                self.velocity[0] = max(0, self.velocity[0] - 0.1)
+            else:
+                self.velocity[0] = min(0, self.velocity[0] + 0.1)
 
-        if not col:
-            self.slide = False
+        if self.invincible_frames:
+            self.invincible_frames -= 1
 
-    def collide_y(self, blocks):
-        for block in blocks:
-            if pygame.sprite.collide_rect(self, block):
-                if type(block) == Spike:
-                    self.kill()
-                    break
+        self.check_status()
 
-                if type(block) == Disappearing_Block:
-                    block.disappear()
+    def running(self, k):
+        self.run = k
 
-                if type(block) == Moving_Block:
-                    self.xvel += block.speed_x
+    def check_status(self):
+        if self.health <= 0:
+            self.die()
 
-                if self.yvel > 0:
-                    self.rect.bottom = block.rect.top
-                    self.onGround = True
-                    self.slide = False
-                    self.yvel = 0
-
-                if self.yvel < 0:
-                    self.rect.top = block.rect.bottom
-                    self.gravitation = GRAVITY
-                    self.yvel = 0
-
-    def update(self, left, right, up, blocks):
-        if left:
-            self.xvel = -MOVE_SPEED
-
-        if right:
-            self.xvel = MOVE_SPEED
-
-        if not (left or right):
-            self.xvel = 0
-        if up:
-            if self.onGround:
-                self.yvel = -self.jump_strenght
-        if not self.onGround:
-            self.yvel += GRAVITY
-
-        self.onGround = False
-        self.rect.y += self.yvel
-        self.collide_y(blocks)
-
-        self.rect.x += self.xvel
-        self.collide_x(blocks)
-
-    def die(self):
-        self.kill()
-
-    def dash(self, blocks):
-        self.speed_x = 20
-        for i in range(8):
-            self.update(False, True, False, blocks)
-        self.speed_x = MOVE_SPEED
+    def hit(self, damage):
+        super().hit(damage)
+        self.invincible_frames = 20

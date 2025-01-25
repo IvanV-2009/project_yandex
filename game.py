@@ -2,6 +2,7 @@ import pygame
 
 from blocks import *
 from player import *
+from Enemies import *
 
 WIDTH, HEIGHT = 500, 500
 
@@ -43,57 +44,64 @@ def generate_level(level):
             elif level[y][x] == 'G':
                 Disappearing_Block(x, y)
             elif level[y][x] == 'M':
-                Moving_Block(x, y, 0, 0, 2, 30)
+                Moving_Block(x, y, 1, 20)
+            elif level[y][x] == 'R':
+                Enemy(x * CELL_SIZE, y * CELL_SIZE, 'robot', 500, 500, player)
+                pass
     return x, y
 
 
-all_sprites = pygame.sprite.Group()
-level_x, level_y = generate_level(load_level('level1.txt'))
 player = Player(50, 50)
+level_x, level_y = generate_level(load_level('level1.txt'))
+
 camera = Camera()
-all_sprites.add(entities_sprites)
-all_sprites.add(sprite_blocks)
 
 
 def main():
     pygame.init()
+    pygame.time.set_timer(pygame.USEREVENT, 100)
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     running = True
     clock = pygame.time.Clock()
     fps = 60
-    movement = (0, 0)
-    player_up, player_left, player_right = False, False, False
+    movement = [0, 0]
     while running:
-        screen.fill((255, 255, 255))
+        screen.fill((0, 0, 0))
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 running = False
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_LEFT:
-                    player_left = True
+                    movement[0] -= 5
                 if e.key == pygame.K_RIGHT:
-                    player_right = True
+                    movement[0] += 5
                 if e.key == pygame.K_UP:
-                    player_up = True
+                    player.jump()
                 if e.key == pygame.K_LSHIFT:
-                    player.dash(sprite_blocks)
+                    player.running(True)
+                if e.key == pygame.K_1:
+                    print(1)
+                    player.die()
 
             if e.type == pygame.KEYUP:
                 if e.key == pygame.K_LEFT:
-                    player_left = False
+                    movement[0] += 5
                 if e.key == pygame.K_RIGHT:
-                    player_right = False
-                if e.key == pygame.K_UP:
-                    player_up = False
+                    movement[0] -= 5
+                if e.key == pygame.K_LSHIFT:
+                    player.running(False)
 
+            if e.type == pygame.MOUSEBUTTONDOWN:
+                if e.button == 1:
+                    player.attack()
         clock.tick(fps)
         camera.update(player)
         for i in all_sprites:
             camera.apply(i)
-        entities_sprites.draw(screen)
-        sprite_blocks.draw(screen)
+        all_sprites.draw(screen)
+        player.update(sprite_blocks, movement)
+        enemises_sprites.update(sprite_blocks, (0, 0))
         sprite_blocks.update()
-        player.update(player_left, player_right, player_up, sprite_blocks)
         pygame.display.flip()
     pygame.quit()
 
