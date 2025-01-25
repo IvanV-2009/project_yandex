@@ -2,7 +2,7 @@ import pygame
 
 from blocks import *
 from entities import *
-from Screens import *
+from utilits import *
 
 GRAVITY = 0.75
 

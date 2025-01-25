@@ -1,5 +1,5 @@
 import pygame
-from Screens import *
+from utilits import *
 
 blocks = {'grass': 'data/blocks/1.png', 'spike': 'data/blocks/spike.png', 'empty': 'data/blocks/empty.png'}
 
