@@ -53,7 +53,7 @@ def generate_level(level):
 
 player = Player(50, 50)
 level_x, level_y = generate_level(load_level('level1.txt'))
-
+healthbar = HealBar(10, 10, 80, 20, player)
 camera = Camera()
 
 
@@ -101,6 +101,8 @@ def main():
         all_sprites.draw(screen)
         player.update(sprite_blocks, movement)
         enemises_sprites.update(sprite_blocks, (0, 0))
+        healthbar.draw(screen)
+        healthbar.update_health()
         sprite_blocks.update()
         pygame.display.flip()
     pygame.quit()
