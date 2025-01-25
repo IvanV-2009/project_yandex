@@ -3,6 +3,7 @@ import pygame
 from blocks import *
 from player import *
 from Enemies import *
+from Guns import *
 
 WIDTH, HEIGHT = 500, 500
 
@@ -55,6 +56,8 @@ player = Player(50, 50)
 level_x, level_y = generate_level(load_level('level1.txt'))
 healthbar = HealBar(10, 10, 80, 20, player)
 camera = Camera()
+gun = Pistol()
+bullets = []
 
 
 def main():
@@ -66,7 +69,7 @@ def main():
     fps = 60
     movement = [0, 0]
     while running:
-        screen.fill((0, 0, 0))
+        screen.fill((255, 255, 255))
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 running = False
@@ -82,6 +85,8 @@ def main():
                 if e.key == pygame.K_1:
                     print(1)
                     player.die()
+                if e.key == pygame.K_d:
+                    gun.shoot(player.rect.x + player.rect.width, player.rect.y + player.rect.height // 2, 'RIGHT')
 
             if e.type == pygame.KEYUP:
                 if e.key == pygame.K_LEFT:
@@ -103,6 +108,8 @@ def main():
         enemises_sprites.update(sprite_blocks, (0, 0))
         healthbar.draw(screen)
         healthbar.update_health()
+        bullets_group.draw(screen)
+        bullets_group.update(entities_sprites)
         sprite_blocks.update()
         pygame.display.flip()
     pygame.quit()

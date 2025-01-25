@@ -48,13 +48,10 @@ class Player(PhysicsEntity):
     def running(self, k):
         self.run = k
 
-    def check_status(self):
-        if self.health <= 0:
-            self.die()
-
     def hit(self, damage):
         super().hit(damage)
         self.invincible_frames = 20
+
 
 class HealBar:
     def __init__(self, x, y, width, height, player):
@@ -74,4 +71,3 @@ class HealBar:
 
         fill_rect = pygame.Rect(self.rect.x, self.rect.y, fill_width, self.rect.height)
         pygame.draw.rect(surface, (0, 255, 0), fill_rect)
-

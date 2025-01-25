@@ -1,5 +1,5 @@
 import pygame
-from utilits import *
+from Screens import *
 from blocks import *
 
 GRAVITY = 0.75
@@ -84,6 +84,8 @@ class PhysicsEntity(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.animation.image, self.direction == -1, False)
         self.animation.update()
 
+        self.check_status()
+
     def die(self):
         self.act = 'death'
         self.kill()
@@ -94,6 +96,11 @@ class PhysicsEntity(pygame.sprite.Sprite):
     def hit(self, damage):
         self.health -= damage
         self.act = 'hurt'
+
+    def check_status(self):
+        if self.health <= 0:
+            self.die()
+
 
 
 entities_sprites = pygame.sprite.Group()
