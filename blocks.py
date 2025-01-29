@@ -6,11 +6,21 @@ blocks = {'grass': 'data/blocks/1.png', 'spike': 'data/blocks/spike.png', 'empty
 BLOCK_WIDTH = 30
 BLOCK_HEIGHT = 30
 
+pygame.init()
+
+
+class Decoration(pygame.sprite.Sprite):
+    def __init__(self, x, y, decor_image):
+        super().__init__(all_sprites)
+        self.image = decor_image
+        self.rect = self.image.get_rect().move(BLOCK_WIDTH * x, BLOCK_HEIGHT * y)
+        self.mask = pygame.mask.from_surface(self.image)
+
 
 class Block(pygame.sprite.Sprite):
-    def __init__(self, x, y, block_type):
+    def __init__(self, x, y, block_image):
         super().__init__(sprite_blocks, all_sprites)
-        self.image = pygame.image.load(blocks[block_type])
+        self.image = block_image
         self.image = pygame.transform.scale(self.image, (BLOCK_WIDTH, BLOCK_HEIGHT))
         self.rect = self.image.get_rect().move(BLOCK_WIDTH * x, BLOCK_HEIGHT * y)
         self.mask = pygame.mask.from_surface(self.image)
@@ -24,7 +34,7 @@ class Spike(Block):
         super().__init__(x, y, 'spike')
 
     def act(self, entity):
-        entity.die()
+        entity.hit(80)
 
 
 class Changer_levels(Block):

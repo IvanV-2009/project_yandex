@@ -40,10 +40,6 @@ class Player(PhysicsEntity):
             else:
                 self.velocity[0] = min(0, self.velocity[0] + 0.1)
 
-        if self.invincible_frames:
-            self.invincible_frames -= 1
-
-        self.check_status()
 
     def running(self, k):
         self.run = k

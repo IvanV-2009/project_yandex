@@ -1,11 +1,18 @@
 import pygame
+import json
 
 from blocks import *
 from player import *
 from Enemies import *
 from Guns import *
 
-WIDTH, HEIGHT = 500, 500
+WIDTH, HEIGHT = 500, 320
+
+pygame.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+assets = {'Block': load_images('blocks/platforms/'),
+          'decor': load_images('blocks/decorations/')}
 
 
 class Camera:
@@ -22,54 +29,40 @@ class Camera:
         self.dy = -(target.rect.y + target.rect.h // 2 - HEIGHT // 2)
 
 
-def load_level(filename):
-    filename = "data/levels/" + filename
-    with open(filename, 'r') as mapFile:
-        level_map = [line for line in mapFile]
-
-    max_width = max(map(len, level_map))
-
-    return list(map(lambda x: x.ljust(max_width, '.'), level_map))
-
-
-def generate_level(level):
-    x, y = None, None
-    for y in range(len(level)):
-        for x in range(len(level[y])):
-            if level[y][x] == '@':
-                Spike(x, y)
-            elif level[y][x] == '-':
-                Block(x, y, 'grass')
-            elif level[y][x] == '0':
-                Changer_levels(x, y)
-            elif level[y][x] == 'G':
-                Disappearing_Block(x, y)
-            elif level[y][x] == 'M':
-                Moving_Block(x, y, 1, 20)
-            elif level[y][x] == 'R':
-                Enemy(x * CELL_SIZE, y * CELL_SIZE, 'robot', 500, 500, player)
-                pass
-    return x, y
+def generate_level(file_name):
+    with open('data/levels/' + file_name) as f:
+        level = json.load(f)
+    player = None
+    for i in level:
+        tile = level[i]
+        if tile['type'] == 'Block':
+            Block(tile['pos'][0], tile['pos'][1], assets[tile['type']][tile['variant']])
+        if tile['type'] == 'decor':
+            Decoration(tile['pos'][0], tile['pos'][1], assets[tile['type']][tile['variant']])
+        if tile['type'] == 'player':
+            player = Player(tile['pos'][0] * BLOCK_WIDTH, tile['pos'][1] * BLOCK_HEIGHT)
+    # if tile['type'] == 'robot':
+    #   Robot(tile['pos'][0] * BLOCK_WIDTH, tile['pos'][1] * BLOCK_HEIGHT)
+    return player
 
 
-player = Player(50, 50)
-level_x, level_y = generate_level(load_level('level1.txt'))
+player = generate_level('map_test.json')
 healthbar = HealBar(10, 10, 80, 20, player)
 camera = Camera()
-gun = Pistol()
+gun = Pistol('10.png', 80)
 bullets = []
 
 
 def main():
-    pygame.init()
-    pygame.time.set_timer(pygame.USEREVENT, 100)
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     running = True
     clock = pygame.time.Clock()
     fps = 60
     movement = [0, 0]
     while running:
         screen.fill((255, 255, 255))
+        background_images = load_images('backgrounds')
+        for im in background_images:
+            screen.blit(im, (0, 0))
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 running = False
@@ -86,7 +79,12 @@ def main():
                     print(1)
                     player.die()
                 if e.key == pygame.K_d:
-                    gun.shoot(player.rect.x + player.rect.width, player.rect.y + player.rect.height // 2, 'RIGHT')
+                    gun.shoot(player.rect.x + player.rect.width, player.rect.y + player.rect.height // 2,
+                              ["RIGHT", 'LEFT'][player.direction == -1])
+                if e.key == pygame.K_2:
+                    for enemy in enemises_sprites:
+                        if type(enemy) == Robot:
+                            enemy.blast()
 
             if e.type == pygame.KEYUP:
                 if e.key == pygame.K_LEFT:
@@ -104,6 +102,7 @@ def main():
         for i in all_sprites:
             camera.apply(i)
         all_sprites.draw(screen)
+        entities_sprites.draw(screen)
         player.update(sprite_blocks, movement)
         enemises_sprites.update(sprite_blocks, (0, 0))
         healthbar.draw(screen)

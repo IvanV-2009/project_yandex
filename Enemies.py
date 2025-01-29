@@ -2,6 +2,8 @@ import pygame
 
 from entities import *
 from player import *
+from Guns import Bullet
+from utilits import *
 
 
 class Enemy(PhysicsEntity):
@@ -21,9 +23,20 @@ class Enemy(PhysicsEntity):
                 self.collisions['right'] or self.collisions['left']:
             self.velocity[0] = - self.velocity[0]
 
-        if pygame.sprite.collide_rect(self, self.player) and not self.player.invincible_frames:
-            print(1)
+        if pygame.sprite.collide_rect(self, self.player) and not self.player.invincible_frames and not self.dead:
             self.player.hit(self.damage)
+
+    def zone_of_seeing(self):
+        pass
+
+
+class Robot(Enemy):
+    def __init__(self, x, y, player, point1=50, point2=50):
+        super().__init__(x, y, 'robot', player, point1, point2)
+
+    def blast(self):
+        self.act = 'shoting'
+        Bullet(self.rect.x, self.rect.y, 'LEFT', 'laser.png', 40)
 
 
 enemises_sprites = pygame.sprite.Group()

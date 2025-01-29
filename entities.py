@@ -1,5 +1,5 @@
 import pygame
-from Screens import *
+from utilits import *
 from blocks import *
 
 GRAVITY = 0.75
@@ -8,7 +8,6 @@ GRAVITY = 0.75
 class PhysicsEntity(pygame.sprite.Sprite):
     def __init__(self, x, y, entity_type):
         super().__init__(entities_sprites, all_sprites)
-        self.yvel = 0
         self.start_x = x
         self.start_y = y
         self.collisions = {'up': False, 'down': False, 'right': False, 'left': False}
@@ -26,6 +25,10 @@ class PhysicsEntity(pygame.sprite.Sprite):
         self.gravitation = GRAVITY
         self.entity_type = entity_type
         self.health = 300
+        self.invincible_frames = 0
+        self.dead = False
+        self.previous_rect = self.rect.copy()
+        self.c = 0
 
     def update(self, blocks, movement=(0, 0)):
 
@@ -67,7 +70,11 @@ class PhysicsEntity(pygame.sprite.Sprite):
         if self.collisions['down']:
             self.jump_state = False
 
-        if self.jump_state:
+        if self.dead:
+            self.act = 'death'
+        elif self.invincible_frames:
+            self.act = 'hurt'
+        elif self.jump_state:
             self.act = 'jump'
         elif motion[0]:
             if self.act == 'attack':
@@ -80,15 +87,26 @@ class PhysicsEntity(pygame.sprite.Sprite):
         if self.previous_act != self.act:
             self.previous_act = self.act
             self.animation = animations[self.entity_type + '/' + self.act].copy()
+            self.image = self.animation.image
+            self.rect = self.image.get_rect(center=self.rect.center).move(0, (
+                        self.image.get_rect().height - self.rect.height) // 2 * [1, -1][
+                                                                              self.rect.height < self.image.get_rect().height])
 
         self.image = pygame.transform.flip(self.animation.image, self.direction == -1, False)
-        self.animation.update()
 
+        if self.invincible_frames:
+            self.invincible_frames -= 1
+
+        if self.dead and self.check_end_of_animation():
+            self.kill()
+
+        self.animation.update()
         self.check_status()
 
     def die(self):
         self.act = 'death'
-        self.kill()
+        self.dead = True
+        self.velocity = [0, 0]
 
     def attack(self):
         self.act = 'attack'
@@ -96,11 +114,16 @@ class PhysicsEntity(pygame.sprite.Sprite):
     def hit(self, damage):
         self.health -= damage
         self.act = 'hurt'
+        self.invincible_frames = 20
 
     def check_status(self):
         if self.health <= 0:
             self.die()
 
+    def check_end_of_animation(self):
+        if self.animation.image == self.animation.frames[-1]:
+            return True
+        return False
 
 
 entities_sprites = pygame.sprite.Group()

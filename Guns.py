@@ -1,17 +1,17 @@
 import pygame
 
-from entities import entities_sprites
+from utilits import *
 
 BULLET_SPEED = 10
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y, direction):
+    def __init__(self, x, y, direction, bullet_type, bullet_damage):
         super().__init__(bullets_group)
-        self.image = pygame.image.load('data/bullets/10.png')
+        self.image = load_image('bullets/' + bullet_type)
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(x, y)
-        self.damage = 10
+        self.damage = bullet_damage
         self.direction = direction
 
     def update(self, entites):
@@ -32,8 +32,12 @@ class Bullet(pygame.sprite.Sprite):
 
 
 class Pistol:
+    def __init__(self, bullet_type, bullet_damage):
+        self.bullet_type = bullet_type
+        self.bullet_damage = bullet_damage
+
     def shoot(self, x, y, direction):
-        return Bullet(x, y, direction)
+        return Bullet(x, y, direction, self.bullet_type, self.bullet_damage)
 
 
 bullets_group = pygame.sprite.Group()
