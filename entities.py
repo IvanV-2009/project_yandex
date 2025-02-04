@@ -27,17 +27,21 @@ class PhysicsEntity(pygame.sprite.Sprite):
         self.health = 300
         self.invincible_frames = 0
         self.dead = False
+        self.hit_boxses_visable = False
         self.previous_rect = self.rect.copy()
+        print(self.rect.height)
         self.c = 0
 
-    def update(self, blocks, movement=(0, 0)):
+    def update(self, blocks, screen, movement=(0, 0)):
 
         self.collisions = {'up': False, 'down': False, 'right': False, 'left': False}
 
         motion = (self.velocity[0] + movement[0], self.velocity[1] + movement[1])
-        self.rect.x += motion[0]
+        if not self.dead:
+            self.rect.x += motion[0]
         for block in blocks:
             if pygame.sprite.collide_rect(self, block):
+                block.act(self)
                 if motion[0] > 0:
                     self.collisions['right'] = True
                     self.rect.right = block.rect.left
@@ -72,6 +76,8 @@ class PhysicsEntity(pygame.sprite.Sprite):
 
         if self.dead:
             self.act = 'death'
+        elif self.act == 'shoting' and not self.check_end_of_animation():
+            self.act = 'shoting'
         elif self.invincible_frames:
             self.act = 'hurt'
         elif self.jump_state:
@@ -88,8 +94,13 @@ class PhysicsEntity(pygame.sprite.Sprite):
             self.previous_act = self.act
             self.animation = animations[self.entity_type + '/' + self.act].copy()
             self.image = self.animation.image
-            self.rect = self.image.get_rect(center=self.rect.center).move(0, (
+            if self.act != 'jump':
+                self.rect = self.image.get_rect(center=self.rect.center).move(0, (
                         self.image.get_rect().height - self.rect.height) // 2 * [1, -1][
+                                                                                  self.rect.height < self.image.get_rect().height])
+        if self.act == 'death':
+            self.rect = self.image.get_rect(center=self.rect.center).move(0, (
+                    self.image.get_rect().height - self.rect.height) // 2 * [-1, 1][
                                                                               self.rect.height < self.image.get_rect().height])
 
         self.image = pygame.transform.flip(self.animation.image, self.direction == -1, False)
@@ -100,7 +111,11 @@ class PhysicsEntity(pygame.sprite.Sprite):
         if self.dead and self.check_end_of_animation():
             self.kill()
 
+        if self.hit_boxses_visable:
+            pygame.draw.rect(screen, 'red', self.rect, width=1)
+
         self.animation.update()
+        self.previous_direction = self.direction
         self.check_status()
 
     def die(self):
@@ -124,6 +139,11 @@ class PhysicsEntity(pygame.sprite.Sprite):
         if self.animation.image == self.animation.frames[-1]:
             return True
         return False
+
+    def show_hit_box(self):
+        self.hit_boxses_visable = not self.hit_boxses_visable
+
+
 
 
 entities_sprites = pygame.sprite.Group()

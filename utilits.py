@@ -1,8 +1,11 @@
 import pygame
 import sys
+import json
 import os
 
 pygame.init()
+
+
 def load_image(name, colorkey=None):
     image = pygame.image.load('data/' + name)
     if colorkey is not None:
@@ -42,9 +45,9 @@ class Animations:
                 frame_location = (self.rect.w * i, self.rect.h * j)
                 im = sheet.subsurface(pygame.Rect(frame_location, self.rect.size))
                 rect2 = im.copy().get_bounding_rect()
-                screen = pygame.Surface((4 + rect2.width + 1, rect2.height + 2), pygame.SRCALPHA, 32)
-                screen.blit(im, (2, 0),
-                            ((rect2.x - 1, rect2.y - 1), (4 + rect2.width + 1, rect2.height + 2)))
+                screen = pygame.Surface((2 + rect2.width + 1, rect2.height + 2), pygame.SRCALPHA, 32)
+                screen.blit(im, (1, 0),
+                            ((rect2.x - 1, rect2.y - 1), (2 + rect2.width + 1, rect2.height + 2)))
 
                 im = screen
                 self.frames.append(im)
@@ -59,9 +62,9 @@ class Animations:
 
 all_sprites = pygame.sprite.Group()
 animations = {'player/idle': Animations(pygame.image.load('data/entities/player/Cyborg_idle.png'), 4, 1, 0, 0, 6),
-              'player/run': Animations(pygame.image.load('data/entities/player/Cyborg_run.png'), 6, 1, 0, 0, 5),
+              'player/run': Animations(pygame.image.load('data/entities/player/1234.png'), 6, 1, 0, 0, 5),
               'player/jump': Animations(pygame.image.load('data/entities/player/Cyborg_jump.png'), 4, 1, 0, 0, 12),
-              'player/death': Animations(pygame.image.load('data/entities/player/Cyborg_death.png'), 6, 1, 0, 0, 80),
+              'player/death': Animations(pygame.image.load('data/entities/player/Cyborg_death.png'), 6, 1, 0, 0, 14),
               'player/attack': Animations(pygame.image.load('data/entities/player/Cyborg_attack3.png'), 8, 1, 0, 0, 5),
               'player/attack_run': Animations(pygame.image.load('data/entities/player/Cyborg_run_attack.png'), 8, 1, 0,
                                               0, 6),
@@ -71,6 +74,6 @@ animations = {'player/idle': Animations(pygame.image.load('data/entities/player/
               'player/hurt': Animations(pygame.image.load('data/entities/player/Cyborg_hurt.png'), 2, 1, 0, 0, 9),
               'robot/death': Animations(pygame.image.load('data/entities/enemies/robot/robot_death.png'), 6, 1, 0, 0,
                                         10),
-              'robot/shoting': Animations(pygame.image.load('data/entities/enemies/robot/robot_death.png'), 6, 1, 0, 0,
-                                          5)}
-
+              'robot/shoting': Animations(pygame.image.load('data/entities/enemies/robot/robot_shoting.png'), 6, 1, 0,
+                                          0,
+                                          14)}
