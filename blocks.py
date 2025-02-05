@@ -3,8 +3,8 @@ from utilits import *
 
 blocks = {'grass': 'data/blocks/1.png', 'spike': 'data/blocks/spike.png', 'empty': 'data/blocks/empty.png'}
 
-BLOCK_WIDTH = 30
-BLOCK_HEIGHT = 30
+BLOCK_WIDTH = 32
+BLOCK_HEIGHT = 32
 
 pygame.init()
 
@@ -21,7 +21,6 @@ class Block(pygame.sprite.Sprite):
     def __init__(self, x, y, block_image):
         super().__init__(sprite_blocks, all_sprites)
         self.image = block_image
-        self.image = pygame.transform.scale(self.image, (BLOCK_WIDTH, BLOCK_HEIGHT))
         self.rect = self.image.get_rect().move(BLOCK_WIDTH * x, BLOCK_HEIGHT * y)
         self.mask = pygame.mask.from_surface(self.image)
 
@@ -35,11 +34,6 @@ class Spike(Block):
 
     def act(self, entity):
         entity.hit(80)
-
-
-class Changer_levels(Block):
-    def __init__(self, x, y):
-        super().__init__(x, y, 'empty')
 
 
 class Chest(Block):
@@ -72,7 +66,7 @@ class Trampoline(Block):
 
 class Moving_Block(Block):
     def __init__(self, x, y, speed, distance):
-        super().__init__(x, y, 'grass')
+        super().__init__(x, y, pygame.image.load('data/blocks/1.png'))
         self.speed = speed
         self.distance = distance
         self.r = 0
@@ -85,6 +79,18 @@ class Moving_Block(Block):
 
     def act(self, entity):
         entity.rect.x += self.speed
+
+
+class HealPotion(Block):
+    def __init__(self, x, y):
+        super().__init__(x, y, pygame.image.load('data/healing_potion.png'))
+        self.image = pygame.transform.scale(self.image, (32, 32))
+        self.rect = self.image.get_rect().move(x * BLOCK_WIDTH, y * BLOCK_HEIGHT)
+
+    def act(self, entity):
+        if entity.__class__.__name__ == 'Player':
+            entity.health += 50
+            self.kill()
 
 
 sprite_blocks = pygame.sprite.Group()

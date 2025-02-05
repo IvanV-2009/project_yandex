@@ -11,7 +11,7 @@ assets = {'Block': load_images('blocks/platforms/'),
           'player': [load_image('entities/player/player.png')],
           'robot': [load_image('entities/enemies/robot/robot.png')]}
 
-with open('map_test.json', 'r') as f:
+with open('map_test2.json', 'r') as f:
     map = json.load(f)
 
 running = True
@@ -30,7 +30,10 @@ while running:
             pygame.mouse.get_pos()[1] + motion[1]) // BLOCK_HEIGHT
     im = assets[curr_type][var].copy()
     im.set_alpha(100)
-    screen.blit(im, (x * BLOCK_WIDTH - motion[0], y * BLOCK_HEIGHT - motion[1]))
+    x += (BLOCK_WIDTH - im.get_rect().width) / BLOCK_WIDTH
+    y += (BLOCK_HEIGHT - im.get_rect().height) / BLOCK_HEIGHT
+    screen.blit(im, (x * BLOCK_WIDTH - motion[0],
+                     y * BLOCK_HEIGHT - motion[1]))
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False

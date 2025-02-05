@@ -15,28 +15,68 @@ class Enemy(PhysicsEntity):
         self.player = player
         self.damage = 50
         self.velocity = [3, 0]
+        self.r = 0
+        self.range_of_seeing_zone = 190
 
-    def update(self, blocks, movement=(0, 0)):
-        super().update(blocks, movement)
+    def update(self, blocks, screen, movement=(0, 0)):
+        super().update(blocks, screen, movement)
 
-        if self.rect.x + self.rect.width >= self.point1 + self.start_x or self.rect.x <= self.start_x - self.point2 or \
-                self.collisions['right'] or self.collisions['left']:
-            self.velocity[0] = - self.velocity[0]
+        if self.collisions['right'] or self.collisions['left'] or self.r >= self.point1 or self.r <= -self.point2:
+            self.velocity[0] = -self.velocity[0]
+
+        self.image = pygame.transform.flip(self.animation.image, self.direction == -1, False)
+
+        self.r += self.velocity[0]
 
         if pygame.sprite.collide_rect(self, self.player) and not self.player.invincible_frames and not self.dead:
             self.player.hit(self.damage)
 
-    def zone_of_seeing(self):
-        pass
+    def zone_of_seeing(self, screen):
+        if self.player.dead:
+            return False
+
+        if self.velocity[0] < 0:
+            if self.hit_boxses_visable:
+                pygame.draw.rect(screen, 'green', (
+                    (self.rect.x - self.range_of_seeing_zone, self.rect.y),
+                    (self.range_of_seeing_zone, self.rect.height)),
+                                 width=1)
+            if (self.rect.x - self.range_of_seeing_zone < self.player.rect.x + self.player.rect.width < self.rect.x
+                    and self.rect.y <= self.player.rect.y + self.player.rect.height and self.player.rect.y <= self.rect.y + self.rect.height):
+                return True
+        if self.velocity[0] > 0:
+            if self.hit_boxses_visable:
+                pygame.draw.rect(screen, 'green', ((self.rect.x + self.rect.width, self.rect.y),
+                                                   (self.range_of_seeing_zone, self.rect.height)), width=1)
+            if (
+                    self.rect.x + self.rect.width + self.range_of_seeing_zone > self.player.rect.x > self.rect.x + self.rect.width
+                    and self.rect.y <= self.player.rect.y + self.player.rect.height and self.player.rect.y <= self.rect.y + self.rect.height):
+                return True
+        return False
 
 
 class Robot(Enemy):
     def __init__(self, x, y, player, point1=50, point2=50):
-        super().__init__(x, y, 'robot', player, point1, point2)
+        super().__init__(x, y, 'robot', point1, point2, player)
 
     def blast(self):
+        self.velocity[0] = 3 * self.direction
+        Bullet(self.rect.x, self.rect.y + self.rect.height // 2 - 10, ['LEFT', "RIGHT"][self.direction == 1],
+               'laser.png',
+               40, self)
+
+    def update(self, blocks, screen, movement=(0, 0)):
+        super().update(blocks, screen, movement)
+
+        if self.zone_of_seeing(screen):
+            self.attack()
+
+        if self.act == 'shoting' and self.check_end_of_animation():
+            self.blast()
+
+    def attack(self):
         self.act = 'shoting'
-        Bullet(self.rect.x, self.rect.y, 'LEFT', 'laser.png', 40)
+        self.velocity[0] = 0
 
 
 enemises_sprites = pygame.sprite.Group()

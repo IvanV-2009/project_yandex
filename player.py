@@ -26,20 +26,21 @@ class Player(PhysicsEntity):
         if self.collisions['down']:
             self.velocity[1] = -self.jump_strenght
 
-    def update(self, blocks, movement):
-        super().update(blocks, movement)
+    def update(self, blocks, screen, movement):
+        super().update(blocks, screen, movement)
 
-        if self.run:
-            if self.direction == 1:
-                self.velocity[0] = min(2, self.velocity[0] + 0.1)
+        motion = (self.velocity[0] + movement[0], self.velocity[1] + movement[1])
+        if motion[0]:
+            if self.run:
+                if self.direction == 1:
+                    self.velocity[0] = min(2, self.velocity[0] + 0.1)
+                else:
+                    self.velocity[0] = max(-2, self.velocity[0] - 0.1)
             else:
-                self.velocity[0] = max(-2, self.velocity[0] - 0.1)
-        else:
-            if self.direction == 1:
-                self.velocity[0] = max(0, self.velocity[0] - 0.1)
-            else:
-                self.velocity[0] = min(0, self.velocity[0] + 0.1)
-
+                if self.direction == 1:
+                    self.velocity[0] = max(0, self.velocity[0] - 0.1)
+                else:
+                    self.velocity[0] = min(0, self.velocity[0] + 0.1)
 
     def running(self, k):
         self.run = k
