@@ -29,6 +29,8 @@ class PhysicsEntity(pygame.sprite.Sprite):
         self.dead = False
         self.previous_rect = self.rect.copy()
         self.c = 0
+        self.hitsound = pygame.mixer.Sound('data/sounds/playerhit.wav')
+        self.hitsound.set_volume(0.01)
 
     def update(self, blocks, movement=(0, 0)):
 
@@ -114,6 +116,7 @@ class PhysicsEntity(pygame.sprite.Sprite):
     def hit(self, damage):
         self.health -= damage
         self.act = 'hurt'
+        self.hitsound.play()
         self.invincible_frames = 20
 
     def check_status(self):

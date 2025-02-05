@@ -8,5 +8,5 @@ class Settings:
     pass
 
 
-class StartScrenn:
+class StartScreen:
     pass

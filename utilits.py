@@ -61,7 +61,7 @@ all_sprites = pygame.sprite.Group()
 animations = {'player/idle': Animations(pygame.image.load('data/entities/player/Cyborg_idle.png'), 4, 1, 0, 0, 6),
               'player/run': Animations(pygame.image.load('data/entities/player/Cyborg_run.png'), 6, 1, 0, 0, 5),
               'player/jump': Animations(pygame.image.load('data/entities/player/Cyborg_jump.png'), 4, 1, 0, 0, 12),
-              'player/death': Animations(pygame.image.load('data/entities/player/Cyborg_death.png'), 6, 1, 0, 0, 80),
+              'player/death': Animations(pygame.image.load('data/entities/player/Cyborg_death.png'), 6, 1, 0, 0, 11),
               'player/attack': Animations(pygame.image.load('data/entities/player/Cyborg_attack3.png'), 8, 1, 0, 0, 5),
               'player/attack_run': Animations(pygame.image.load('data/entities/player/Cyborg_run_attack.png'), 8, 1, 0,
                                               0, 6),

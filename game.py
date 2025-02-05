@@ -14,6 +14,13 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 assets = {'Block': load_images('blocks/platforms/'),
           'decor': load_images('blocks/decorations/')}
 
+jumpsound = pygame.mixer.Sound('data/sounds/jump1.wav')
+jumpsound.set_volume(0.01)
+deathsound = pygame.mixer.Sound('data/sounds/death.wav')
+deathsound.set_volume(0.01)
+bulletsound = pygame.mixer.Sound('data/sounds/bulletshot.wav')
+bulletsound.set_volume(0.05)
+
 
 class Camera:
     def __init__(self):
@@ -72,13 +79,16 @@ def main():
                 if e.key == pygame.K_RIGHT:
                     movement[0] += 5
                 if e.key == pygame.K_UP:
+                    jumpsound.play()
                     player.jump()
                 if e.key == pygame.K_LSHIFT:
                     player.running(True)
                 if e.key == pygame.K_1:
                     print(1)
+                    deathsound.play()
                     player.die()
                 if e.key == pygame.K_d:
+                    bulletsound.play()
                     gun.shoot(player.rect.x + player.rect.width, player.rect.y + player.rect.height // 2,
                               ["RIGHT", 'LEFT'][player.direction == -1])
                 if e.key == pygame.K_2:
