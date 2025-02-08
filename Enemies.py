@@ -18,6 +18,7 @@ class Enemy(PhysicsEntity):
         self.r = 0
         self.health = 500
         self.range_of_seeing_zone = 240
+        self.death_sound_played = False
 
     def update(self, blocks, screen, movement=(0, 0)):
         super().update(blocks, screen, movement)
@@ -36,7 +37,9 @@ class Enemy(PhysicsEntity):
             self.player.hit(self.damage)
 
         if self.dead:
-            sounds['entity_death'].play()
+            if not self.death_sound_played:
+                sounds['entity_death'].play()
+                self.death_sound_played = True
 
     def zone_of_seeing(self, screen):
         if self.player.dead:
