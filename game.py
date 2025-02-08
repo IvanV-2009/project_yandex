@@ -334,7 +334,7 @@ def main():
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_LEFT or e.key == pygame.K_a:
                     movement[0] -= 5
-                if e.key == pygame.K_RIGHT or e.key == pygame.K_d:
+                if e.key == pygame.K_RIGHT or e.key == pygame.K_d or e.key == pygame.K_SPACE:
                     movement[0] += 5
                 if e.key == pygame.K_UP or e.key == pygame.K_w:
                     player.jump()
