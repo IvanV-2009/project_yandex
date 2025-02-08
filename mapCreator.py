@@ -15,7 +15,7 @@ assets = {'Block': load_images('blocks/platforms/'),
           'door': [load_image('blocks/special_blocks/door.png')],
           'key': [load_image('blocks/special_blocks/key.png')]}
 
-with open('map_test.json', 'r') as f:
+with open('map_test3.json', 'r') as f:
     map = json.load(f)
 
 running = True
@@ -85,13 +85,13 @@ while running:
                 deleting = False
 
     if keys[pygame.K_DOWN]:
-        motion[1] += 5
+        motion[1] += 15
     if keys[pygame.K_UP]:
-        motion[1] -= 5
+        motion[1] -= 15
     if keys[pygame.K_RIGHT]:
-        motion[0] += 5
+        motion[0] += 15
     if keys[pygame.K_LEFT]:
-        motion[0] -= 5
+        motion[0] -= 15
     for i in map:
         tile = map[i]
         screen.blit(assets[tile['type']][tile['variant']],
@@ -101,3 +101,6 @@ while running:
         key_pressed_ticks += 1
     clock.tick(60)
     pygame.display.flip()
+
+with open('map_test.json', 'w') as f:
+    json.dump(map, f)
