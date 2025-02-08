@@ -15,16 +15,18 @@ class Player(PhysicsEntity):
     def __init__(self, x, y):
         super().__init__(x, y, 'player')
         self.xvel = 0
-        self.jump_strenght = 15
+        self.jump_strenght = 17
         self.gravitation = GRAVITY
         self.slide = False
         self.jumps = 0
         self.run = False
         self.invincible_frames = 0
+        self.get_key = False
 
     def jump(self):
         if self.collisions['down']:
             self.velocity[1] = -self.jump_strenght
+            sounds['jump'].play()
 
     def update(self, blocks, screen, movement):
         super().update(blocks, screen, movement)
@@ -42,11 +44,15 @@ class Player(PhysicsEntity):
                 else:
                     self.velocity[0] = min(0, self.velocity[0] + 0.1)
 
+        if self.dead:
+            sounds['death'].play()
+
     def running(self, k):
         self.run = k
 
     def hit(self, damage):
         super().hit(damage)
+        sounds['player_hit'].play()
         self.invincible_frames = 20
 
 

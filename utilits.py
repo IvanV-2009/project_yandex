@@ -1,10 +1,20 @@
 import pygame
 import sys
+import json
 import os
 
 pygame.init()
+
+
 def load_image(name, colorkey=None):
     image = pygame.image.load('data/' + name)
+    if 'spike' in name:
+        image = pygame.transform.scale(image, (32, 32))
+    if 'potion' in name:
+        image = pygame.transform.scale(image, (32, 32))
+    if 'door' in name:
+        image = pygame.transform.scale(image, (30, 40))
+
     if colorkey is not None:
         image = image.convert()
         if colorkey == -1:
@@ -20,6 +30,11 @@ def load_images(path):
     for img_name in sorted(os.listdir('data/' + path)):
         images.append(load_image(path + '/' + img_name))
     return images
+
+
+def load_sound(name):
+    sound = pygame.mixer.Sound('data/sounds/' + name)
+    return sound
 
 
 class Animations:
@@ -42,9 +57,9 @@ class Animations:
                 frame_location = (self.rect.w * i, self.rect.h * j)
                 im = sheet.subsurface(pygame.Rect(frame_location, self.rect.size))
                 rect2 = im.copy().get_bounding_rect()
-                screen = pygame.Surface((4 + rect2.width + 1, rect2.height + 2), pygame.SRCALPHA, 32)
-                screen.blit(im, (2, 0),
-                            ((rect2.x - 1, rect2.y - 1), (4 + rect2.width + 1, rect2.height + 2)))
+                screen = pygame.Surface((2 + rect2.width + 1, rect2.height + 2), pygame.SRCALPHA, 32)
+                screen.blit(im, (1, 0),
+                            ((rect2.x - 1, rect2.y - 1), (2 + rect2.width + 1, rect2.height + 2)))
 
                 im = screen
                 self.frames.append(im)
@@ -59,9 +74,9 @@ class Animations:
 
 all_sprites = pygame.sprite.Group()
 animations = {'player/idle': Animations(pygame.image.load('data/entities/player/Cyborg_idle.png'), 4, 1, 0, 0, 6),
-              'player/run': Animations(pygame.image.load('data/entities/player/Cyborg_run.png'), 6, 1, 0, 0, 5),
+              'player/run': Animations(pygame.image.load('data/entities/player/1234.png'), 6, 1, 0, 0, 5),
               'player/jump': Animations(pygame.image.load('data/entities/player/Cyborg_jump.png'), 4, 1, 0, 0, 12),
-              'player/death': Animations(pygame.image.load('data/entities/player/Cyborg_death.png'), 6, 1, 0, 0, 11),
+              'player/death': Animations(pygame.image.load('data/entities/player/Cyborg_death.png'), 6, 1, 0, 0, 14),
               'player/attack': Animations(pygame.image.load('data/entities/player/Cyborg_attack3.png'), 8, 1, 0, 0, 5),
               'player/attack_run': Animations(pygame.image.load('data/entities/player/Cyborg_run_attack.png'), 8, 1, 0,
                                               0, 6),
@@ -71,6 +86,24 @@ animations = {'player/idle': Animations(pygame.image.load('data/entities/player/
               'player/hurt': Animations(pygame.image.load('data/entities/player/Cyborg_hurt.png'), 2, 1, 0, 0, 9),
               'robot/death': Animations(pygame.image.load('data/entities/enemies/robot/robot_death.png'), 6, 1, 0, 0,
                                         10),
-              'robot/shoting': Animations(pygame.image.load('data/entities/enemies/robot/robot_death.png'), 6, 1, 0, 0,
-                                          5)}
+              'robot/shoting': Animations(pygame.image.load('data/entities/enemies/robot/robot_shoting.png'), 6, 1, 0,
+                                          0,
+                                          14)}
 
+sounds = {'jump': load_sound('jump2.wav'),
+          'death': load_sound('death.wav'),
+          'bulletshot': load_sound('bulletshot.wav'),
+          'collect': load_sound('collect.wav'),
+          'entity_death': load_sound('entitydeath.wav'),
+          'player_hit': load_sound('playerhit.wav'),
+          'laser_shot': load_sound('lasershot.wav'),
+          'menu_sound': load_sound('menunavigation.wav')}
+
+sounds['jump'].set_volume(0.1)
+sounds['bulletshot'].set_volume(0.4)
+sounds['death'].set_volume(0.5)
+sounds['collect'].set_volume(0.4)
+sounds['entity_death'].set_volume(0.1)
+sounds['laser_shot'].set_volume(0.2)
+sounds['player_hit'].set_volume(0.2)
+sounds['menu_sound'].set_volume(0.05)

@@ -1,14 +1,17 @@
+import os
+
 import pygame
 import json
+import pygame.font
 
-from blocks import *
 from player import *
 from Enemies import *
 from Guns import *
 
-WIDTH, HEIGHT = 500, 320
-
 pygame.init()
+
+WIDTH, HEIGHT = 500, 320
+SETTINGS_WIDTH, SETTINGS_HEIGHT = 400, 300
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 assets = {'Block': load_images('blocks/platforms/'),
@@ -19,15 +22,6 @@ assets = {'Block': load_images('blocks/platforms/'),
           'heal_potion': [load_image('blocks/special_blocks/healing_potion.png')],
           'door': [load_image('blocks/special_blocks/door.png')],
           'key': [load_image('blocks/special_blocks/key.png')]}
-
-jumpsound = pygame.mixer.Sound('data/sounds/jump1.wav')
-jumpsound.set_volume(0.01)
-deathsound = pygame.mixer.Sound('data/sounds/death.wav')
-deathsound.set_volume(0.01)
-bulletsound = pygame.mixer.Sound('data/sounds/bulletshot.wav')
-bulletsound.set_volume(0.05)
-
-SETTINGS_WIDTH, SETTINGS_HEIGHT = 400, 300
 
 LEVEL_NUM = 0
 
@@ -342,6 +336,7 @@ def main():
                     movement[0] += 5
                 if e.key == pygame.K_UP or e.key == pygame.K_w:
                     player.jump()
+                    sounds['jump'].play()
                 if e.key == pygame.K_LSHIFT:
                     player.running(True)
                 if e.key == pygame.K_1:

@@ -16,6 +16,7 @@ class Enemy(PhysicsEntity):
         self.damage = 50
         self.velocity = [3, 0]
         self.r = 0
+        self.health = 500
         self.range_of_seeing_zone = 240
 
     def update(self, blocks, screen, movement=(0, 0)):
@@ -33,6 +34,9 @@ class Enemy(PhysicsEntity):
 
         if pygame.sprite.collide_rect(self, self.player) and not self.player.invincible_frames and not self.dead:
             self.player.hit(self.damage)
+
+        if self.dead:
+            sounds['entity_death'].play()
 
     def zone_of_seeing(self, screen):
         if self.player.dead:
@@ -64,6 +68,7 @@ class Robot(Enemy):
         super().__init__(x, y, 'robot', point1, point2, player)
 
     def blast(self):
+        sounds['laser_shot'].play()
         Bullet(self.rect.x, self.rect.y + self.rect.height // 2 - 10, ['LEFT', "RIGHT"][self.direction == 1],
                'laser.png',
                40, self)

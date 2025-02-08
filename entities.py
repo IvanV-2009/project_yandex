@@ -30,8 +30,6 @@ class PhysicsEntity(pygame.sprite.Sprite):
         self.hit_boxses_visable = False
         self.previous_rect = self.rect.copy()
         print(self.rect.height)
-        self.hitsound = pygame.mixer.Sound('data/sounds/playerhit.wav')
-        self.hitsound.set_volume(0.01)
         self.time_in_air = 0
 
     def update(self, blocks, screen, movement=(0, 0)):
@@ -135,7 +133,6 @@ class PhysicsEntity(pygame.sprite.Sprite):
     def hit(self, damage):
         self.health -= damage
         self.act = 'hurt'
-        self.hitsound.play()
         self.invincible_frames = 20
 
     def check_status(self):

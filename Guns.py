@@ -53,6 +53,7 @@ class Pistol:
         Bullet(self.player.rect.x + self.player.rect.width * self.player.direction,
                self.player.rect.y + self.player.rect.height // 2,
                ['RIGHT', 'LEFT'][self.player.direction == -1], self.bullet_type, self.bullet_damage, self.player)
+        sounds['bulletshot'].play()
 
 
 bullets_group = pygame.sprite.Group()

@@ -95,6 +95,7 @@ class HealPotion(Block):
         if entity.__class__.__name__ == 'Player':
             entity.health += 50
             self.kill()
+            sounds['collect'].play()
 
 
 sprite_blocks = pygame.sprite.Group()
