@@ -15,22 +15,32 @@ class Player(PhysicsEntity):
     def __init__(self, x, y):
         super().__init__(x, y, 'player')
         self.xvel = 0
-        self.jump_strenght = 17
+        self.jump_strenght = 17  # Сила первого прыжка
+        self.double_jump_strenght = self.jump_strenght * 0.5  # Сила второго прыжка (50% от первого)
         self.gravitation = GRAVITY
         self.slide = False
-        self.jumps = 0
+        self.jumpscnt = 0  # Количество выполненных прыжков
         self.run = False
         self.invincible_frames = 0
         self.get_key = False
 
     def jump(self):
-        if self.collisions['down']:
+        if self.collisions['down']:  # Первый прыжок (на земле)
             self.velocity[1] = -self.jump_strenght
+            self.jumpscnt = 1  # Увеличиваем счетчик прыжков
+            sounds['jump'].play()  # Воспроизведение звука прыжка
+        elif self.jumpscnt == 1:  # Второй прыжок (в воздухе)
+            self.velocity[1] = -self.double_jump_strenght
+            self.jumpscnt = 2  # Увеличиваем счетчик прыжков
             sounds['jump'].play()
 
     def update(self, blocks, screen, movement):
         super().update(blocks, screen, movement)
 
+        if self.collisions['down']:
+            self.jumpscnt = 0  # Сбрасываем счетчик прыжков
+
+            # Логика движения
         motion = (self.velocity[0] + movement[0], self.velocity[1] + movement[1])
         if motion[0]:
             if self.run:
