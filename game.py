@@ -336,7 +336,6 @@ def main():
                     movement[0] += 5
                 if e.key == pygame.K_UP or e.key == pygame.K_w:
                     player.jump()
-                    sounds['jump'].play()
                 if e.key == pygame.K_LSHIFT:
                     player.running(True)
                 if e.key == pygame.K_1:

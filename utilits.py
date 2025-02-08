@@ -100,7 +100,7 @@ sounds = {'jump': load_sound('jump2.wav'),
           'menu_sound': load_sound('menunavigation.wav')}
 
 sounds['jump'].set_volume(0.1)
-sounds['bulletshot'].set_volume(0.4)
+sounds['bulletshot'].set_volume(0.2)
 sounds['death'].set_volume(0.5)
 sounds['collect'].set_volume(0.4)
 sounds['entity_death'].set_volume(0.1)

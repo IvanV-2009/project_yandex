@@ -106,14 +106,13 @@ class PhysicsEntity(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(center=self.rect.center).move(0, (
                     self.image.get_rect().height - self.rect.height) // 2 * [-1, 1][
                                                                               self.rect.height < self.image.get_rect().height])
+        if self.dead and self.check_end_of_animation():
+            self.kill()
 
         self.image = pygame.transform.flip(self.animation.image, self.direction == -1, False)
 
         if self.invincible_frames:
             self.invincible_frames -= 1
-
-        if self.dead and self.check_end_of_animation():
-            self.kill()
 
         if self.hit_boxses_visable:
             pygame.draw.rect(screen, 'red', self.rect, width=1)
