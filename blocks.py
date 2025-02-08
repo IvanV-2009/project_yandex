@@ -42,11 +42,13 @@ class Chest(Block):
 
 class Key(Block):
     def __init__(self, x, y):
-        super().__init__(x, y, 'key')
+        super().__init__(x, y, load_image('blocks/special_blocks/key.png'))
 
     def act(self, entity):
         if entity.__class__.__name__ == 'Player':
             entity.get_key = True
+            sounds['collect'].play()
+            self.kill()
 
 
 class Disappearing_Block(Block):

@@ -14,6 +14,8 @@ def load_image(name, colorkey=None):
         image = pygame.transform.scale(image, (32, 32))
     if 'door' in name:
         image = pygame.transform.scale(image, (30, 40))
+    if 'key' in name:
+        image = pygame.transform.scale(image, (30, 30))
 
     if colorkey is not None:
         image = image.convert()

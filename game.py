@@ -292,6 +292,8 @@ def generate_level(file_name):
             HealPotion(tile['pos'][0], tile['pos'][1])
         if tile['type'] == 'door':
             Changer_levels(tile['pos'][0], tile['pos'][1], assets[tile['type']][tile['variant']])
+        if tile['type'] == 'key':
+            Key(tile['pos'][0], tile['pos'][1])
 
     for tile in entites_sp:
         Robot(tile['pos'][0] * BLOCK_WIDTH, tile['pos'][1] * BLOCK_HEIGHT, player, 300, 300)
