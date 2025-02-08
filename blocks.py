@@ -30,7 +30,7 @@ class Block(pygame.sprite.Sprite):
 
 class Spike(Block):
     def __init__(self, x, y):
-        super().__init__(x, y, 'spike')
+        super().__init__(x, y, load_image('blocks/special_blocks/spike.png'))
 
     def act(self, entity):
         entity.hit(80)
@@ -43,6 +43,10 @@ class Chest(Block):
 class Key(Block):
     def __init__(self, x, y):
         super().__init__(x, y, 'key')
+
+    def act(self, entity):
+        if entity.__class__.__name__ == 'Player':
+            entity.get_key = True
 
 
 class Disappearing_Block(Block):
@@ -83,7 +87,7 @@ class Moving_Block(Block):
 
 class HealPotion(Block):
     def __init__(self, x, y):
-        super().__init__(x, y, pygame.image.load('data/healing_potion.png'))
+        super().__init__(x, y, pygame.image.load('data/blocks/special_blocks/healing_potion.png'))
         self.image = pygame.transform.scale(self.image, (32, 32))
         self.rect = self.image.get_rect().move(x * BLOCK_WIDTH, y * BLOCK_HEIGHT)
 

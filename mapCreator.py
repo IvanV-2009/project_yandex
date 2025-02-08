@@ -9,7 +9,11 @@ screen = pygame.display.set_mode((500, 500))
 assets = {'Block': load_images('blocks/platforms/'),
           'decor': load_images('blocks/decorations/'),
           'player': [load_image('entities/player/player.png')],
-          'robot': [load_image('entities/enemies/robot/robot.png')]}
+          'robot': [load_image('entities/enemies/robot/robot.png')],
+          'spike': [load_image('blocks/special_blocks/spike.png')],
+          'heal_potion': [load_image('blocks/special_blocks/healing_potion.png')],
+          'door': [load_image('blocks/special_blocks/door.png')],
+          'key': [load_image('blocks/special_blocks/key.png')]}
 
 with open('map_test2.json', 'r') as f:
     map = json.load(f)

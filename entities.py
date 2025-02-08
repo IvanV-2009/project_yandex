@@ -30,9 +30,9 @@ class PhysicsEntity(pygame.sprite.Sprite):
         self.hit_boxses_visable = False
         self.previous_rect = self.rect.copy()
         print(self.rect.height)
-        self.c = 0
         self.hitsound = pygame.mixer.Sound('data/sounds/playerhit.wav')
         self.hitsound.set_volume(0.01)
+        self.time_in_air = 0
 
     def update(self, blocks, screen, movement=(0, 0)):
 
@@ -66,6 +66,9 @@ class PhysicsEntity(pygame.sprite.Sprite):
             self.velocity[1] = 0
         self.velocity[1] = min(self.gravitation + self.velocity[1], 9)
 
+        if not self.collisions['down']:
+            self.time_in_air += 1
+
         if motion[0] > 0:
             self.direction = 1
         if motion[0] < 0:
@@ -78,10 +81,10 @@ class PhysicsEntity(pygame.sprite.Sprite):
 
         if self.dead:
             self.act = 'death'
-        elif self.act == 'shoting' and not self.check_end_of_animation():
-            self.act = 'shoting'
         elif self.invincible_frames:
             self.act = 'hurt'
+        elif self.act == 'shoting' and not self.check_end_of_animation():
+            self.act = 'shoting'
         elif self.jump_state:
             self.act = 'jump'
         elif motion[0]:
@@ -135,7 +138,7 @@ class PhysicsEntity(pygame.sprite.Sprite):
         self.invincible_frames = 20
 
     def check_status(self):
-        if self.health <= 0:
+        if self.health <= 0 or self.time_in_air >= 230:
             self.die()
 
     def check_end_of_animation(self):
@@ -145,8 +148,6 @@ class PhysicsEntity(pygame.sprite.Sprite):
 
     def show_hit_box(self):
         self.hit_boxses_visable = not self.hit_boxses_visable
-
-
 
 
 entities_sprites = pygame.sprite.Group()

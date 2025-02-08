@@ -27,7 +27,7 @@ class Bullet(pygame.sprite.Sprite):
             self.rect.x += BULLET_SPEED
 
         for entity in entites:
-            if self.shooter != entity and pygame.sprite.collide_rect(self, entity):
+            if type(self.shooter) != type(entity) and pygame.sprite.collide_rect(self, entity):
                 entity.hit(self.damage)
                 self.kill()
                 break
