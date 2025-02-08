@@ -166,7 +166,10 @@ def main_menu(screen):
             if event.type == pygame.QUIT:
                 exit(0)
 
-        screen.fill((0, 0, 255))  # Заполняем экран чёрным цветом
+        screen.fill((0, 0, 255))
+        im_background = pygame.image.load('data/main_menu.png')
+        im_background = pygame.transform.scale(im_background, (WIDTH, HEIGHT))
+        screen.blit(im_background, (0, 0))
 
         # Заголовок меню
         title_text = FONT.render("My Awesome Game", True, WHITE)

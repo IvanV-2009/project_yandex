@@ -103,9 +103,9 @@ sounds = {'jump': load_sound('jump2.wav'),
 
 sounds['jump'].set_volume(0.02)
 sounds['bulletshot'].set_volume(0.2)
-sounds['death'].set_volume(0.5)
-sounds['collect'].set_volume(0.4)
+sounds['death'].set_volume(0.03)
+sounds['collect'].set_volume(0.02)
 sounds['entity_death'].set_volume(0.1)
-sounds['laser_shot'].set_volume(0.2)
+sounds['laser_shot'].set_volume(0.02)
 sounds['player_hit'].set_volume(0.02)
 sounds['menu_sound'].set_volume(0.05)
