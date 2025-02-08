@@ -78,6 +78,7 @@ class PhysicsEntity(pygame.sprite.Sprite):
             self.jump_state = True
         if self.collisions['down']:
             self.jump_state = False
+            self.time_in_air = 0
 
         if self.dead:
             self.act = 'death'
