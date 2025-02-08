@@ -52,8 +52,8 @@ class Player(PhysicsEntity):
 
     def hit(self, damage):
         super().hit(damage)
-        sounds['player_hit'].play()
-        self.invincible_frames = 20
+        if self.invincible_frames:
+            sounds['player_hit'].play()
 
 
 class HealBar:

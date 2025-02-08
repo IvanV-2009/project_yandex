@@ -15,7 +15,7 @@ assets = {'Block': load_images('blocks/platforms/'),
           'door': [load_image('blocks/special_blocks/door.png')],
           'key': [load_image('blocks/special_blocks/key.png')]}
 
-with open('map_test3.json', 'r') as f:
+with open('map_test.json', 'r') as f:
     map = json.load(f)
 
 running = True
@@ -51,7 +51,7 @@ while running:
 
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_t:
-                with open('map_test3.json', 'w') as f:
+                with open('map_test.json', 'w') as f:
                     json.dump(map, f)
             if e.key == pygame.K_q:
                 typ += 1

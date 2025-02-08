@@ -130,9 +130,10 @@ class PhysicsEntity(pygame.sprite.Sprite):
         self.act = 'attack'
 
     def hit(self, damage):
-        self.health -= damage
-        self.act = 'hurt'
-        self.invincible_frames = 20
+        if not self.invincible_frames:
+            self.health -= damage
+            self.act = 'hurt'
+            self.invincible_frames = 20
 
     def check_status(self):
         if self.health <= 0 or self.time_in_air >= 230:

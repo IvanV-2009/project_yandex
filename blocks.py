@@ -33,7 +33,7 @@ class Spike(Block):
         super().__init__(x, y, load_image('blocks/special_blocks/spike.png'))
 
     def act(self, entity):
-        entity.hit(80)
+        entity.hit(40)
 
 
 class Chest(Block):
