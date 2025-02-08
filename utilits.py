@@ -82,6 +82,8 @@ animations = {'player/idle': Animations(pygame.image.load('data/entities/player/
               'player/attack': Animations(pygame.image.load('data/entities/player/Cyborg_attack3.png'), 8, 1, 0, 0, 5),
               'player/attack_run': Animations(pygame.image.load('data/entities/player/Cyborg_run_attack.png'), 8, 1, 0,
                                               0, 6),
+              'player/double_jump': Animations(pygame.image.load('data/entities/player/Cyborg_doublejump.png'), 6, 1, 0,
+                                               0, 6),
               'robot/idle': Animations(pygame.image.load('data/entities/enemies/robot/robot_idle.png'), 4, 1, 0, 0, 6),
               'robot/run': Animations(pygame.image.load('data/entities/enemies/robot/robot_run.png'), 6, 1, 0, 0, 6),
               'robot/hurt': Animations(pygame.image.load('data/entities/enemies/robot/robot_hurt.png'), 2, 1, 0, 0, 9),

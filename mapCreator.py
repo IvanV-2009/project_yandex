@@ -15,7 +15,7 @@ assets = {'Block': load_images('blocks/platforms/'),
           'door': [load_image('blocks/special_blocks/door.png')],
           'key': [load_image('blocks/special_blocks/key.png')]}
 
-with open('map_test3.json', 'r') as f:
+with open('map_test.json', 'r') as f:
     map = json.load(f)
 
 running = True

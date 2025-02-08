@@ -10,7 +10,7 @@ from Guns import *
 
 pygame.init()
 
-WIDTH, HEIGHT = 500, 320
+WIDTH, HEIGHT = 1280, 720
 SETTINGS_WIDTH, SETTINGS_HEIGHT = 400, 300
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 

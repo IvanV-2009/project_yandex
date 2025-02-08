@@ -84,8 +84,10 @@ class PhysicsEntity(pygame.sprite.Sprite):
             self.act = 'hurt'
         elif self.act == 'shoting' and not self.check_end_of_animation():
             self.act = 'shoting'
-        elif self.jump_state:
+        elif self.jump_state and self.act != 'double_jump':
             self.act = 'jump'
+        elif self.act == 'double_jump' and not self.check_end_of_animation():
+            self.act = 'double_jump'
         elif motion[0]:
             if self.act == 'attack':
                 self.act += '_run'
@@ -96,12 +98,8 @@ class PhysicsEntity(pygame.sprite.Sprite):
 
         if self.previous_act != self.act:
             self.previous_act = self.act
-            self.animation = animations[self.entity_type + '/' + self.act].copy()
-            self.image = self.animation.image
-            if self.act != 'jump':
-                self.rect = self.image.get_rect(center=self.rect.center).move(0, (
-                        self.image.get_rect().height - self.rect.height) // 2 * [1, -1][
-                                                                                  self.rect.height < self.image.get_rect().height])
+            self.change_animation()
+
         if self.act == 'death':
             self.rect = self.image.get_rect(center=self.rect.center).move(0, (
                     self.image.get_rect().height - self.rect.height) // 2 * [-1, 1][
@@ -147,5 +145,12 @@ class PhysicsEntity(pygame.sprite.Sprite):
     def show_hit_box(self):
         self.hit_boxses_visable = not self.hit_boxses_visable
 
+    def change_animation(self):
+        self.animation = animations[self.entity_type + '/' + self.act].copy()
+        self.image = self.animation.image
+        if self.act != 'jump' and self.act != 'double_jump':
+            self.rect = self.image.get_rect(center=self.rect.center).move(0, (
+                    self.image.get_rect().height - self.rect.height) // 2 * [1, -1][
+                                                                              self.rect.height < self.image.get_rect().height])
 
 entities_sprites = pygame.sprite.Group()
