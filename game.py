@@ -23,7 +23,8 @@ assets = {'Block': load_images('blocks/platforms/'),
           'door': [load_image('blocks/special_blocks/door.png')],
           'key': [load_image('blocks/special_blocks/key.png')],
           'disappearing_block': [load_image('blocks/platforms/Tile_29.png')],
-          'gates': [load_image('blocks/special_blocks/gates.png')]}
+          'gates': [load_image('blocks/special_blocks/gates.png')],
+          'coin': [load_image('blocks/special_blocks/coin.png')]}
 
 LEVEL_NUM = 0
 
@@ -319,6 +320,7 @@ def generate_level(file_name):
 
     with open('data/levels/' + file_name) as f:
         level = json.load(f)
+
     player = None
     entites_sp = []
 
@@ -342,6 +344,8 @@ def generate_level(file_name):
             Key(tile['pos'][0], tile['pos'][1])
         if tile['type'] == 'disappearing_block':
             Disappearing_Block(tile['pos'][0], tile['pos'][1])
+        if tile['type'] == 'coin':
+            Coin(tile['pos'][0], tile['pos'][1])
 
     for tile in entites_sp:
         Robot(tile['pos'][0] * BLOCK_WIDTH, tile['pos'][1] * BLOCK_HEIGHT, player, 300, 300)
@@ -370,6 +374,7 @@ def main():
     fps = 60
     movement = [0, 0]
     main_menu(screen)
+    coin = Coin(4, 10)
     while running:
         screen.fill((255, 255, 255))
         background_images = load_images('backgrounds')

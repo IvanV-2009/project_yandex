@@ -101,5 +101,16 @@ class HealPotion(Block):
             sounds['collect'].play()
 
 
+class Coin(Block):
+    def __init__(self, x, y):
+        super().__init__(x, y, load_image('blocks/special_blocks/coin.png'))
+
+    def act(self, entity):
+        if entity.__class__.__name__ == 'Player':
+            global SCORE
+            SCORE += 100
+            self.kill()
+
+
 sprite_blocks = pygame.sprite.Group()
 spikes_sprites = pygame.sprite.Group()

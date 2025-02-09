@@ -153,4 +153,5 @@ class PhysicsEntity(pygame.sprite.Sprite):
                     self.image.get_rect().height - self.rect.height) // 2 * [1, -1][
                                                                               self.rect.height < self.image.get_rect().height])
 
+
 entities_sprites = pygame.sprite.Group()

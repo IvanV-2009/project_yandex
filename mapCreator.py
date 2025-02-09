@@ -15,7 +15,8 @@ assets = {'Block': load_images('blocks/platforms/'),
           'door': [load_image('blocks/special_blocks/door.png')],
           'key': [load_image('blocks/special_blocks/key.png')],
           'disappearing_block': [load_image('blocks/platforms/Tile_29.png')],
-          'gates': [load_image('blocks/special_blocks/gates.png')]}
+          'gates': [load_image('blocks/special_blocks/gates.png')],
+          'coin': [load_image('blocks/special_blocks/coin.png')]}
 
 with open('map_test.json', 'r') as f:
     map = json.load(f)

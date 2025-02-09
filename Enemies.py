@@ -65,7 +65,6 @@ class Enemy(PhysicsEntity):
         return False
 
 
-
 class Robot(Enemy):
     def __init__(self, x, y, player, point1=50, point2=50):
         super().__init__(x, y, 'robot', point1, point2, player)

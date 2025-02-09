@@ -5,6 +5,8 @@ import os
 
 pygame.init()
 
+SCORE = 0
+
 
 def load_image(name, colorkey=None):
     image = pygame.image.load('data/' + name)
@@ -15,6 +17,8 @@ def load_image(name, colorkey=None):
     if 'door' in name:
         image = pygame.transform.scale(image, (30, 40))
     if 'key' in name:
+        image = pygame.transform.scale(image, (30, 30))
+    if 'coin' in name:
         image = pygame.transform.scale(image, (30, 30))
 
     if colorkey is not None:
