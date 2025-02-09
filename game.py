@@ -22,7 +22,8 @@ assets = {'Block': load_images('blocks/platforms/'),
           'heal_potion': [load_image('blocks/special_blocks/healing_potion.png')],
           'door': [load_image('blocks/special_blocks/door.png')],
           'key': [load_image('blocks/special_blocks/key.png')],
-          'disappearing_block': [load_image('blocks/platforms/Tile_29.png')]}
+          'disappearing_block': [load_image('blocks/platforms/Tile_29.png')],
+          'gates': [load_image('blocks/special_blocks/gates.png')]}
 
 LEVEL_NUM = 0
 
@@ -33,6 +34,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (200, 200, 200)
 RED = (255, 0, 0)
+BLUE = (0, 0, 255)
 
 # Шрифт
 pygame.font.init()
@@ -244,6 +246,35 @@ def death_screen(screen, score):
     return False
 
 
+def win_screen(screen):
+    win_menu_running = True
+    while win_menu_running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit(0)
+
+        screen.fill(BLUE)  # Заполняем экран чёрным цветом
+
+        # Заголовок экрана победы
+        win_text = FONT.render("You Win!", True, WHITE)
+        death_rect = win_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
+        screen.blit(win_text, death_rect)
+
+        # Кнопки экрана победы
+        menu_button = draw_button(screen, "Main Menu", WIDTH // 2 - 100, HEIGHT // 2 + 20, 200, 50, GRAY, BLACK)
+        quit_button = draw_button(screen, "Quit", WIDTH // 2 - 100, HEIGHT // 2 + 90, 200, 50, GRAY, BLACK)
+
+        if menu_button:
+            main_menu(screen)
+            return None  # Возвращаем None для возврата в главное меню
+        if quit_button:
+            exit(0)
+
+        pygame.display.flip()
+
+    return False
+
+
 class Camera:
     def __init__(self):
         self.dx = 0
@@ -271,6 +302,15 @@ class Changer_levels(Block):
             level_name = os.listdir('data/levels')[LEVEL_NUM]
             movement = [0, 0]
             player, healthbar, gun = generate_level(level_name)
+
+
+class Gates(Block):
+    def __init__(self, x, y, im):
+        super().__init__(x, y, im)
+
+    def act(self, pl):
+        if type(pl) == Player and pl.get_key:
+            win_screen(screen)
 
 
 def generate_level(file_name):
