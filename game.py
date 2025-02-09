@@ -205,7 +205,7 @@ def main_menu(screen):
     return False
 
 
-def death_screen(screen, score):
+def death_screen(screen):
     """Отображает экран после смерти."""
     death_running = True
     while death_running:
@@ -221,7 +221,7 @@ def death_screen(screen, score):
         screen.blit(death_text, death_rect)
 
         # Отображение счета
-        score_text = FONT.render(f"Score: {score}", True, WHITE)
+        score_text = FONT.render(f"Score: {SCORE}", True, WHITE)
         score_rect = score_text.get_rect(center=(WIDTH // 2, HEIGHT // 4 + 70 - 50))
         screen.blit(score_text, score_rect)
 
@@ -419,7 +419,7 @@ def main():
                 camera.apply(i)
         if player.dead:
             movement = [0, 0]
-            death_screen(screen, 100)
+            death_screen(screen)
         all_sprites.draw(screen)
         entities_sprites.draw(screen)
         player.update(sprite_blocks, screen, movement)

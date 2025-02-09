@@ -33,7 +33,7 @@ class Bullet(pygame.sprite.Sprite):
                 break
 
         for block in blocks:
-            if pygame.sprite.collide_rect(self, block):
+            if pygame.sprite.collide_rect(self, block) and block.__class__.__name__ == 'Block':
                 self.kill()
                 break
 
