@@ -33,7 +33,8 @@ class Spike(Block):
         super().__init__(x, y, load_image('blocks/special_blocks/spike.png'))
 
     def act(self, entity):
-        entity.hit(40)
+        if entity.__class__.__name__ == 'Player':
+            entity.hit(40)
 
 
 class Chest(Block):
@@ -53,7 +54,7 @@ class Key(Block):
 
 class Disappearing_Block(Block):
     def __init__(self, x, y):
-        super().__init__(x, y, 'grass')
+        super().__init__(x, y, load_image('blocks/platforms/Tile_29.png'))
         self.timer = 0
 
     def disappear(self):

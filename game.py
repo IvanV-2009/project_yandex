@@ -21,9 +21,12 @@ assets = {'Block': load_images('blocks/platforms/'),
           'spike': [load_image('blocks/special_blocks/spike.png')],
           'heal_potion': [load_image('blocks/special_blocks/healing_potion.png')],
           'door': [load_image('blocks/special_blocks/door.png')],
-          'key': [load_image('blocks/special_blocks/key.png')]}
+          'key': [load_image('blocks/special_blocks/key.png')],
+          'disappearing_block': [load_image('blocks/platforms/Tile_29.png')]}
 
 LEVEL_NUM = 0
+
+SCORE = 0
 
 # Цвета
 WHITE = (255, 255, 255)
@@ -297,6 +300,8 @@ def generate_level(file_name):
             Changer_levels(tile['pos'][0], tile['pos'][1], assets[tile['type']][tile['variant']])
         if tile['type'] == 'key':
             Key(tile['pos'][0], tile['pos'][1])
+        if tile['type'] == 'disappearing_block':
+            Disappearing_Block(tile['pos'][0], tile['pos'][1])
 
     for tile in entites_sp:
         Robot(tile['pos'][0] * BLOCK_WIDTH, tile['pos'][1] * BLOCK_HEIGHT, player, 300, 300)
