@@ -24,7 +24,8 @@ assets = {'Block': load_images('blocks/platforms/'),
           'key': [load_image('blocks/special_blocks/key.png')],
           'disappearing_block': [load_image('blocks/platforms/Tile_29.png')],
           'gates': [load_image('blocks/special_blocks/gates.png')],
-          'coin': [load_image('blocks/special_blocks/coin.png')]}
+          'coin': [load_image('blocks/special_blocks/coin.png')],
+          'small_potion': [load_image('blocks/special_blocks/Small_Potion.png')]}
 
 LEVEL_NUM = 0
 
@@ -178,7 +179,7 @@ def main_menu(screen):
         screen.blit(im_background, (0, 0))
 
         # Заголовок меню
-        title_text = FONT.render("My Awesome Game", True, WHITE)
+        title_text = FONT.render("World Wanderer", True, WHITE)
         title_rect = title_text.get_rect(center=(WIDTH // 2, HEIGHT // 4))
         screen.blit(title_text, title_rect)
 
@@ -205,8 +206,9 @@ def main_menu(screen):
     return False
 
 
-def death_screen(screen, score):
+def death_screen(screen):
     """Отображает экран после смерти."""
+    global SCORE
     death_running = True
     while death_running:
         for event in pygame.event.get():
@@ -221,7 +223,7 @@ def death_screen(screen, score):
         screen.blit(death_text, death_rect)
 
         # Отображение счета
-        score_text = FONT.render(f"Score: {score}", True, WHITE)
+        score_text = FONT.render(f"Score: {SCORE}", True, WHITE)
         score_rect = score_text.get_rect(center=(WIDTH // 2, HEIGHT // 4 + 70 - 50))
         screen.blit(score_text, score_rect)
 
@@ -235,9 +237,11 @@ def death_screen(screen, score):
             global LEVEL_NUM, player, healthbar, gun, movement
             movement = [0, 0]
             player, healthbar, gun = generate_level(os.listdir('data/levels')[LEVEL_NUM])
+            SCORE = 0
             return True  # Возвращаем True для перезапуска игры
         if menu_button:
             main_menu(screen)
+            SCORE = 0
             return None  # Возвращаем None для возврата в главное меню
         if quit_button:
             exit(0)
@@ -346,6 +350,8 @@ def generate_level(file_name):
             Disappearing_Block(tile['pos'][0], tile['pos'][1])
         if tile['type'] == 'coin':
             Coin(tile['pos'][0], tile['pos'][1])
+        if tile['type'] == 'small_potion':
+            Small_Potion(tile['pos'][0], tile['pos'][1])
 
     for tile in entites_sp:
         Robot(tile['pos'][0] * BLOCK_WIDTH, tile['pos'][1] * BLOCK_HEIGHT, player, 300, 300)
@@ -419,7 +425,7 @@ def main():
                 camera.apply(i)
         if player.dead:
             movement = [0, 0]
-            death_screen(screen, 100)
+            death_screen(screen)
         all_sprites.draw(screen)
         entities_sprites.draw(screen)
         player.update(sprite_blocks, screen, movement)

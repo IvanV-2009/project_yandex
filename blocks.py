@@ -112,5 +112,33 @@ class Coin(Block):
             self.kill()
 
 
+class Small_Potion(Block):
+    def __init__(self, x, y, duration=5000, shrink_factor=0.5):
+        super().__init__(x, y, load_image('blocks/special_blocks/Small_Potion.png'))
+        self.add(potion_sprites)
+        self.duration = duration
+        self.shrink_factor = shrink_factor
+        self.start_time = None
+        self.is_active = False
+
+    def apply(self, target):
+        if not self.is_active:
+            target.original_size = target.size
+            target.size = int(target.size * self.shrink_factor)
+            target.resize(target.size)
+            self.is_active = True
+            self.start_time = pygame.time.get_ticks()
+
+    def update(self, target):
+        if self.is_active:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.start_time > self.duration:
+                target.size = target.original_size
+                target.resize(target.size)
+                self.is_active = False
+                self.start_time = None
+
+
 sprite_blocks = pygame.sprite.Group()
 spikes_sprites = pygame.sprite.Group()
+potion_sprites = pygame.sprite.Group()
