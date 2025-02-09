@@ -16,9 +16,10 @@ assets = {'Block': load_images('blocks/platforms/'),
           'key': [load_image('blocks/special_blocks/key.png')],
           'disappearing_block': [load_image('blocks/platforms/Tile_29.png')],
           'gates': [load_image('blocks/special_blocks/gates.png')],
-          'coin': [load_image('blocks/special_blocks/coin.png')]}
+          'coin': [load_image('blocks/special_blocks/coin.png')],
+          'small_potion': [load_image('blocks/special_blocks/Small_Potion.png')]}
 
-with open('map_test.json', 'r') as f:
+with open('map_test4.json', 'r') as f:
     map = json.load(f)
 
 running = True
@@ -54,7 +55,7 @@ while running:
 
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_t:
-                with open('map_test.json', 'w') as f:
+                with open('map_test4.json', 'w') as f:
                     json.dump(map, f)
             if e.key == pygame.K_q:
                 typ += 1
@@ -105,5 +106,5 @@ while running:
     clock.tick(60)
     pygame.display.flip()
 
-with open('map_test.json', 'w') as f:
+with open('map_test4.json', 'w') as f:
     json.dump(map, f)
