@@ -27,9 +27,7 @@ assets = {'Block': load_images('blocks/platforms/'),
           'coin': [load_image('blocks/special_blocks/coin.png')],
           'small_potion': [load_image('blocks/special_blocks/Small_Potion.png')]}
 
-LEVEL_NUM = 2
-
-SCORE = 0
+LEVEL_NUM = 0
 
 # Цвета
 WHITE = (255, 255, 255)
@@ -208,7 +206,7 @@ def main_menu(screen):
 
 def death_screen(screen):
     """Отображает экран после смерти."""
-    global SCORE
+    from blocks import SCORE
     death_running = True
     while death_running:
         for event in pygame.event.get():
@@ -352,6 +350,8 @@ def generate_level(file_name):
             Coin(tile['pos'][0], tile['pos'][1])
         if tile['type'] == 'small_potion':
             Small_Potion(tile['pos'][0], tile['pos'][1], player)
+        if tile['type'] == 'gates':
+            Gates(tile['pos'][0], tile['pos'][1], load_image('blocks/special_blocks/gates.png'))
 
     for tile in entites_sp:
         Robot(tile['pos'][0] * BLOCK_WIDTH, tile['pos'][1] * BLOCK_HEIGHT, player, 300, 300)
@@ -380,7 +380,6 @@ def main():
     fps = 60
     movement = [0, 0]
     main_menu(screen)
-    coin = Coin(4, 10)
     while running:
         screen.fill((255, 255, 255))
         background_images = load_images('backgrounds')
@@ -404,6 +403,8 @@ def main():
                         entity.show_hit_box()
                 if e.key == pygame.K_2:
                     player.get_key = True
+                if e.key == pygame.K_3:
+                    print(SCORE)
                 if e.key == pygame.K_ESCAPE:
                     settings_window(screen)
             if e.type == pygame.KEYUP:

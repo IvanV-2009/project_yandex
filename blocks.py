@@ -6,6 +6,8 @@ blocks = {'grass': 'data/blocks/1.png', 'spike': 'data/blocks/spike.png', 'empty
 BLOCK_WIDTH = 32
 BLOCK_HEIGHT = 32
 
+SCORE = 0
+
 pygame.init()
 
 
@@ -110,6 +112,7 @@ class Coin(Block):
             global SCORE
             SCORE += 100
             self.kill()
+            sounds['collect'].play()
 
 
 class Small_Potion(Block):

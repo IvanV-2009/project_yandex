@@ -5,8 +5,6 @@ import os
 
 pygame.init()
 
-SCORE = 0
-
 
 def load_image(name, colorkey=None):
     image = pygame.image.load('data/' + name)
