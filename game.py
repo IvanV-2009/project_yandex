@@ -27,7 +27,7 @@ assets = {'Block': load_images('blocks/platforms/'),
           'coin': [load_image('blocks/special_blocks/coin.png')],
           'small_potion': [load_image('blocks/special_blocks/Small_Potion.png')]}
 
-LEVEL_NUM = 0
+LEVEL_NUM = 2
 
 SCORE = 0
 
@@ -351,7 +351,7 @@ def generate_level(file_name):
         if tile['type'] == 'coin':
             Coin(tile['pos'][0], tile['pos'][1])
         if tile['type'] == 'small_potion':
-            Small_Potion(tile['pos'][0], tile['pos'][1])
+            Small_Potion(tile['pos'][0], tile['pos'][1], player)
 
     for tile in entites_sp:
         Robot(tile['pos'][0] * BLOCK_WIDTH, tile['pos'][1] * BLOCK_HEIGHT, player, 300, 300)
